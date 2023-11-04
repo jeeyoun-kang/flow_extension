@@ -1,8 +1,6 @@
 # 파일 확장자 차단 프로그램 과제
 
 <br>
-<br>
-
 
 
 ## 목차
@@ -21,12 +19,14 @@
 - [각 스택들을 사용한 이유](#각-스택들을-사용한-이유)
 
   
+<br>
 
 
 ## 소개
 
 어떤 파일들은 첨부시 보안에 문제가 될 수 있습니다.. 특히 exe, sh 등의 실행파일이 존재할 경우 서버에 올려서 실행이 될 수 있는 위험이 있어 파일 확장자 차단을 하게 되었습니다. <br>
 
+<br>
 
 
 ## 개발 환경
@@ -34,6 +34,7 @@
 - Windows
 - IntelliJ
 - GitHub
+<br>
 
 ## 사용 기술
 
@@ -58,6 +59,7 @@
 **데이터베이스**
 
 - H2(Version 2.2.224 (2023-09-17)
+<br>
 
 ## How To Install
 
@@ -73,6 +75,7 @@
   - 이후부터는 jdbc:h2:tcp://localhost/~/파일명 로 접속
 - sql폴더안에 있는 sql파일로 테이블 생성
 
+<br>
 
 
 ## 화면 구성
@@ -83,18 +86,18 @@
 
 ![extension_1](https://github.com/jeeyoun-kang/codingtest/assets/59076085/276be9a8-37aa-43b6-8a2c-aa24bca7808a)
 
-
+<br>
 
 <h3>커스텀확장자</h3>
 
 ![extension_2](https://github.com/jeeyoun-kang/codingtest/assets/59076085/03ba2d89-168f-48d0-9f8d-f78eb4d1fd75)
 
 
-
 ## ERD-구조
 
 ![extension_erd](https://github.com/HaeBangProject/HAEBANG/assets/59076085/4c998521-b7e4-4a6d-9f12-41ebd3409aea)
 
+<br>
 
 
 ## 핵심 기능
@@ -134,6 +137,7 @@
 
 - Ajax를 이용해 x버튼을 클릭 시 확장자 데이터를 컨트롤러에 보내고, DB에 기존에 데이터가 존재할때 db에서 삭제하게 구현했습니다.
 
+<br>
 
 
 ## 각 스택들을 사용한 이유
