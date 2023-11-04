@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<h2>파일 확장자 차단</h2>
+
+<h3 style="font-weight: normal;">파일 확장자에 따라 특정 형식의 파일을 첨부하거나 전송하지 못하도록 제한</h3>
+고정확장자
+<input type="checkbox" name="bat" onchange="saveCheckboxState(this)" > bat
+<input type="checkbox" name="cmd" onchange="saveCheckboxState(this)" > cmd
+<input type="checkbox" name="com" onchange="saveCheckboxState(this)" > com
+<input type="checkbox" name="cpl" onchange="saveCheckboxState(this)"> cpl
+<input type="checkbox" name="exe" onchange="saveCheckboxState(this)" > exe
+<input type="checkbox" name="scr" onchange="saveCheckboxState(this)" > scr
+<input type="checkbox" name="js" onchange="saveCheckboxState(this)" > js
+
+
+<script>
+    window.onload = function() {
+        let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            let name = checkbox.getAttribute('name');
+            checkbox.checked = localStorage.getItem(name) === 'true';
+        });
+    };
+
+    function saveCheckboxState(checkbox) {
+        let name = checkbox.getAttribute('name');
+        $.ajax({
+            type: "POST",
+            url: "/count",
+            data: { count:0, text: name},
+        });
+        localStorage.setItem(checkbox.getAttribute('name'), checkbox.checked);
+    }
+</script>
+<br>
+
+<script>
+    $(document).ready(function(){
+        let count = 0;
+        let addedValues = [];
+
+        $("#addBtn").click(function(){
+            let text = $("#textInput").val();
+            if (text !== '') {
+                console.log(count);
+                if (text === 'bat' || text === 'cmd' || text === 'com' || text === 'cpl' || text === 'exe' || text === 'scr' || text === 'js')  {
+                    alert("고정 확장자에서 체크해주세요.");
+                } else if (count >= 200) {
+                    alert("최대 200개까지만 추가 가능합니다.");
+                } else {
+                    if (!addedValues.includes(text)) {
+                        count++;
+                        addedValues.push(text);
+
+                        let newDiv = $('<div id="div' + count + '" style="display: inline-block; height: fit-content; overflow: hidden; white-space: nowrap; border: 1px solid black;"></div>');
+                        let inputElement = $('<input type="text" value="' + text + '" disabled style="margin-right: 0; width: ' + (text.length) * 8 + 'px; background-color: transparent; border: none;">');
+                        newDiv.append(inputElement);
+                        newDiv.append('<button id="' + count + '" class="cancelBtn" style="border: 0; background-color: transparent;"">X</button>');
+                        $("#inputs").append(newDiv);
+                        $("#textInput").val('');
+                        $.ajax({
+                            type: "POST",
+                            url: "/count",
+                            data: { count: addedValues.length, text: text },
+                            success: function(response) {
+                                $("#countValue").text(JSON.stringify(response) + "/200");
+                            }
+                        });
+                    } else {
+                        alert("이미 추가된 값입니다.");
+                    }
+                }
+            }
+        });
+
+        $(document).on('click', '.cancelBtn', function(){
+            let id = $(this).attr('id');
+            let canceledText = $("#div" + id + " input").val();
+            addedValues = addedValues.filter(value => value !== canceledText);
+            $("#div" + id).remove();
+            console.log("2");
+            $.ajax({
+                type: "POST",
+                url: "/count",
+                data: { count: addedValues.length, text: canceledText },
+                success: function(response) {
+                    $("#countValue").text(JSON.stringify(response) + "/200");
+                }
+            });
+        });
+    });
+</script>
+
+
+<br>
+커스텀 확장자 <input type="text" id="textInput" placeholder="확장자 입력" maxlength="20">
+<button id="addBtn">&nbsp+추가</button>
+<div id="inputs" style="border: 1px solid; padding: 10px; width: 700px; height: 400px; ">
+    <div id="countValue">0/200</div>
+</div>
+</body>
+</html>
